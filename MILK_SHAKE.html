@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bubloo 🧋 — BoBa Milkshakes | Dindigul</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'><path d='M17 3c-.5 5-4 7-6 11' stroke='%23B51D5B' stroke-width='2.4' fill='none' stroke-linecap='round'/><path d='M17 3c.5 4 3.5 6 5.5 9.5' stroke='%23B51D5B' stroke-width='2.4' fill='none' stroke-linecap='round'/><circle cx='9.5' cy='22.5' r='6.4' fill='%23B51D5B'/><circle cx='24' cy='23.5' r='7' fill='%23FF4F7B'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script defer src="https://unpkg.com/lucide@latest"></script>
+<style>
+/* ============ SYSTEM ============ */
+:root{
+  --bg:#FFF8F4; --bg2:#FFFFFF; --bg3:#FFF1EB;
+  --pink:#FF4F7B; --pink-d:#B51D5B; --pink-soft:#FFDCE7; --pink-ghost:#F4CFDC;
+  --ink:#2B1220; --ink2:#6E4A5A; --ink3:#B08E9B;
+  --cream:#FFF6F1;
+  --disp:"Fraunces",serif; --body:"Instrument Sans",sans-serif; --mono:"Space Mono",monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;overflow-x:clip}
+::selection{background:var(--pink);color:#fff}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--pink-ghost);border-radius:6px}::-webkit-scrollbar-thumb:hover{background:var(--pink)}
+:focus-visible{outline:2px dashed var(--pink);outline-offset:3px}
+img,svg,canvas{display:block}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px)}
+section{scroll-margin-top:80px}
+.mono{font-family:var(--mono)}
+.cherry{width:22px;height:22px}
+
+/* paper grain */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:2000;opacity:.045;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");background-size:160px}
+
+/* ============ LOADER ============ */
+#loader{position:fixed;inset:0;z-index:3000;background:var(--bg);display:grid;place-items:center;transition:transform .7s cubic-bezier(.7,0,.2,1)}
+#loader.done{transform:translateY(-101%)}
+.ld-in{text-align:center}
+.ld-logo{font-family:var(--disp);font-weight:900;font-size:clamp(50px,10vw,90px);letter-spacing:-.02em;display:flex;align-items:baseline;justify-content:center;gap:6px}
+.ld-logo .cherry{width:.42em;height:.42em;animation:chdrop .8s .45s cubic-bezier(.3,1.6,.4,1) both}
+@keyframes chdrop{0%{transform:translateY(-.8em) scale(.5);opacity:0}100%{transform:none;opacity:1}}
+.ld-bar{width:min(280px,60vw);height:5px;background:var(--pink-ghost);margin:26px auto 12px;border-radius:99px;overflow:hidden}
+.ld-bar i{display:block;height:100%;width:0;background:var(--pink)}
+.ld-meta{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--ink2)}
+.ld-meta b{color:var(--pink);font-weight:700}
+
+/* ============ NAV ============ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,248,244,.86);backdrop-filter:blur(10px);border-bottom:2px dotted var(--pink-ghost);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 10px 30px rgba(181,29,91,.08)}
+.navin{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,56px);height:66px;display:flex;align-items:center;gap:clamp(14px,3vw,40px)}
+.brand{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+.brand b{font-family:var(--disp);font-weight:900;font-size:25px;letter-spacing:-.02em}
+.nlinks{display:flex;gap:clamp(10px,2vw,26px);flex:1;overflow-x:auto;scrollbar-width:none}
+.nlinks::-webkit-scrollbar{display:none}
+.nlinks a{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--ink2);white-space:nowrap;padding:6px 2px;border-bottom:2px solid transparent;transition:.2s}
+.nlinks a:hover{color:var(--pink);border-color:var(--pink)}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;font-weight:700;padding:13px 24px;border-radius:99px;border:2px solid var(--ink);transition:transform .18s,background .18s,color .18s,border-color .18s}
+.btn svg{width:14px;height:14px}
+.btn:active{transform:scale(.96)}
+.btn-pink{background:var(--pink);border-color:var(--pink);color:#fff}
+.btn-pink:hover{background:var(--pink-d);border-color:var(--pink-d);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--cream);transform:translateY(-2px)}
+.btn.big{padding:16px 30px;font-size:12.5px;width:100%;justify-content:center}
+#navOrder{position:relative;flex:0 0 auto}
+#navBadge{position:absolute;top:-7px;right:-7px;min-width:21px;height:21px;border-radius:99px;background:var(--ink);color:#fff;font-family:var(--mono);font-size:10px;font-weight:700;display:grid;place-items:center;padding:0 5px;opacity:0;transform:scale(.4);transition:.25s cubic-bezier(.3,1.6,.4,1)}
+#navBadge.on{opacity:1;transform:scale(1)}
+#navBadge.pulse{animation:bpulse .5s}
+@keyframes bpulse{40%{transform:scale(1.5);background:var(--pink-d)}}
+
+/* ============ HERO / UNBLEND (pinned) ============ */
+#unblend{height:560vh;position:relative;background:
+  radial-gradient(var(--pink-ghost) 1.3px, transparent 1.3px);
+  background-size:26px 26px}
+#pin{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;user-select:none;-webkit-user-select:none}
+#gl{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+.hero-copy{position:absolute;z-index:5;left:clamp(20px,4.5vw,64px);top:44%;transform:translateY(-50%);max-width:600px;pointer-events:none;transition:opacity .1s}
+.hero-copy.gone{visibility:hidden}
+.kick{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;color:var(--pink);font-weight:700}
+h1{font-family:var(--disp);font-weight:640;font-size:clamp(58px,9.5vw,138px);line-height:.93;letter-spacing:-.02em;margin:18px 0 22px}
+h1 em{font-style:italic;font-weight:480;color:var(--pink);text-transform:lowercase}
+.hl{display:block;overflow:hidden}
+.hl>span{display:block;transform:translateY(112%);transition:transform .95s cubic-bezier(.2,.85,.2,1)}
+body.loaded .hl>span{transform:none}
+body.loaded .hl:nth-child(2)>span{transition-delay:.09s}
+body.loaded .hl:nth-child(3)>span{transition-delay:.18s}
+.hfade{opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s}
+body.loaded .hfade{opacity:1;transform:none}
+body.loaded .hfade.d1{transition-delay:.3s}body.loaded .hfade.d2{transition-delay:.42s}body.loaded .hfade.d3{transition-delay:.54s}
+.hero-sub{color:var(--ink2);max-width:420px;font-size:16.5px}
+.hero-sub b{color:var(--ink)}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px;pointer-events:auto}
+.model-tag{position:absolute;right:clamp(20px,4.5vw,64px);bottom:96px;z-index:6;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--ink2);text-align:right;line-height:2;border-right:2px solid var(--pink);padding-right:14px;pointer-events:none}
+.model-tag b{color:var(--ink);font-weight:700}
+.scroll-hint{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);z-index:6;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.32em;color:var(--ink2);pointer-events:none}
+.scroll-hint svg{width:16px;height:16px;color:var(--pink);animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(7px)}}
+/* callouts */
+.cl{position:absolute;z-index:7;width:300px;pointer-events:none;opacity:var(--o,0);transform:translate(var(--tx,0px),var(--ty,16px))}
+.cl h3{font-family:var(--disp);font-weight:640;font-size:29px;letter-spacing:-.01em;margin:6px 0 8px}
+.cl p{color:var(--ink2);font-size:14.5px}
+.cl-k{font-family:var(--mono);font-size:9.5px;letter-spacing:.24em;color:var(--pink);font-weight:700}
+.cl-r{right:clamp(20px,5vw,72px)}
+.cl-l{left:clamp(20px,5vw,72px)}
+.cl-r::before{content:"";position:absolute;top:15px;right:-92px;width:78px;border-top:2px dotted var(--pink)}
+.cl-l::before{content:"";position:absolute;top:15px;left:-92px;width:78px;border-top:2px dotted var(--pink)}
+.cl-r::after{content:"";position:absolute;top:11.5px;right:-98px;width:9px;height:9px;border-radius:50%;background:var(--pink)}
+.cl-l::after{content:"";position:absolute;top:11.5px;left:-98px;width:9px;height:9px;border-radius:50%;background:var(--pink)}
+.cl-c{left:50%;top:50%;width:min(560px,86vw);text-align:center;transform:translate(calc(-50% + var(--tx,0px)),calc(-50% + var(--ty,16px)))}
+.cl-c h3{font-size:clamp(40px,6vw,64px);font-weight:800}
+.cl-c p{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--ink2);margin-top:10px}
+/* stage rail */
+.rail{position:absolute;right:26px;top:50%;transform:translateY(-50%);z-index:8;display:flex;flex-direction:column;gap:14px}
+.rail button{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--ink3);transition:.25s;flex-direction:row-reverse}
+.rail button i{width:9px;height:9px;border-radius:50%;border:2px solid var(--pink-ghost);background:transparent;transition:.25s;flex:0 0 auto}
+.rail button span{opacity:0;transform:translateX(6px);transition:.25s}
+.rail button:hover span{opacity:1;transform:none}
+.rail button.on{color:var(--pink)}
+.rail button.on i{background:var(--pink);border-color:var(--pink);transform:scale(1.35)}
+.rail button.on span{opacity:1;transform:none}
+#partTip{position:absolute;z-index:9;font-family:var(--mono);font-size:10px;letter-spacing:.1em;background:var(--ink);color:var(--cream);padding:7px 11px;border-radius:8px;pointer-events:none;display:none;white-space:nowrap}
+#partTip b{color:var(--pink)}
+/* 3D fallback */
+.no3d{position:absolute;inset:0;z-index:4;display:none;place-items:center;text-align:center;flex-direction:column;gap:18px}
+.no3d svg{width:min(300px,60vw)}
+.no3d p{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--ink2)}
+
+/* ============ MARQUEE ============ */
+.mq{overflow:hidden;background:var(--pink);color:var(--cream);padding:14px 0;position:relative}
+.mq-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.mq:hover .mq-track{animation-play-state:paused}
+.mq-track>div{display:flex;align-items:center;gap:34px;padding-right:34px;font-family:var(--disp);font-style:italic;font-weight:520;font-size:clamp(19px,2.6vw,27px);white-space:nowrap}
+.mq-track .cherry{width:17px;height:17px;flex:0 0 auto}
+@keyframes mq{to{transform:translateX(-50%)}}
+.mq.rev .mq-track{animation-direction:reverse}
+
+/* ============ SECTION HEADERS ============ */
+.sec{padding:clamp(84px,11vw,150px) 0}
+.shead{margin-bottom:clamp(38px,5vw,64px)}
+.shead .kick{display:block;margin-bottom:16px}
+.shead h2{font-family:var(--disp);font-weight:680;font-size:clamp(40px,5.6vw,74px);line-height:1.02;letter-spacing:-.015em}
+.shead h2 em{font-style:italic;font-weight:460;color:var(--pink)}
+.shead .lede{color:var(--ink2);max-width:520px;margin-top:18px;font-size:16.5px}
+
+/* reveals */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+
+/* ============ MENU ============ */
+#menu{background:var(--bg2);border-top:2px dotted var(--pink-ghost)}
+.menu-list{border-top:2px solid var(--ink)}
+.mrow{display:grid;grid-template-columns:64px minmax(0,1fr) auto auto 54px;gap:20px;align-items:center;width:100%;text-align:left;padding:24px 10px;border-bottom:2px dotted var(--pink-ghost);transition:background .2s;position:relative}
+.mrow:hover{background:#FFF2F6}
+.mnum{font-family:var(--mono);font-size:11px;color:var(--pink);letter-spacing:.1em}
+.mname{display:flex;align-items:baseline;gap:16px;min-width:0}
+.mname b{font-family:var(--disp);font-weight:680;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.01em;transition:transform .25s,color .25s;white-space:nowrap}
+.mrow:hover .mname b{transform:translateX(8px);color:var(--pink)}
+.mname small{display:block;font-family:var(--body);font-size:13px;color:var(--ink2);font-weight:400;letter-spacing:0;white-space:normal;margin-top:4px}
+.mname-in{min-width:0}
+.mlead{flex:1;border-bottom:3px dotted var(--pink-ghost);transform:translateY(-7px);min-width:30px}
+.mprice{font-family:var(--mono);font-weight:700;font-size:16px}
+.mgo{width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;transition:.25s}
+.mgo svg{width:16px;height:16px;transition:transform .25s}
+.mrow:hover .mgo{background:var(--pink);border-color:var(--pink);color:#fff}
+.mrow:hover .mgo svg{transform:rotate(90deg)}
+.menu-note{margin-top:26px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--ink2);display:flex;gap:12px;align-items:center}
+.menu-note .cherry{width:15px;height:15px}
+/* floating splat preview */
+#mfloat{position:fixed;z-index:1500;pointer-events:none;left:0;top:0;display:none;flex-direction:column;align-items:center;gap:10px;transform:translate(-50%,-115%)}
+#mfloat.on{display:flex}
+#mfloat svg{width:104px;height:104px;filter:drop-shadow(0 10px 18px rgba(181,29,91,.25));animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#mfname{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;font-weight:700;background:var(--ink);color:var(--cream);padding:6px 12px;border-radius:99px;white-space:nowrap}
+@media(hover:none){#mfloat{display:none!important}}
+
+/* ============ MIXER ============ */
+#mixer{background:var(--bg);border-top:2px dotted var(--pink-ghost)}
+.mix-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,70px);align-items:center}
+.mix-stage{position:relative;aspect-ratio:1;max-width:540px;margin:0 auto;width:100%}
+.mix-circle{position:absolute;inset:5%;border-radius:50%;background:var(--pink-soft)}
+.mix-ring{position:absolute;inset:1.5%;border-radius:50%;border:2px dashed var(--pink)}
+#gl2{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+.mix-cap{position:absolute;bottom:-8px;left:50%;transform:translate(-50%,100%);font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--ink2);white-space:nowrap}
+.mix-price{position:absolute;top:2%;right:-2%;transform:rotate(8deg);background:#fff;border:2px solid var(--ink);padding:10px 16px;text-align:center;box-shadow:4px 4px 0 var(--pink)}
+.mix-price span{font-family:var(--mono);font-weight:700;font-size:19px;display:block}
+.mix-price small{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--ink2)}
+.mix-panel{display:flex;flex-direction:column;gap:24px}
+.opt-k{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--pink);font-weight:700;display:block;margin-bottom:11px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;padding:10px 15px;border-radius:99px;border:2px solid var(--pink-ghost);color:var(--ink2);background:#fff;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.chip i.dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex:0 0 auto}
+.chip:hover{border-color:var(--pink);color:var(--ink)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--cream);animation:chipop .3s cubic-bezier(.3,1.8,.4,1)}
+@keyframes chipop{50%{transform:scale(1.12)}}
+.receipt{background:#fff;border:2px solid var(--ink);padding:20px 22px;box-shadow:5px 5px 0 var(--pink-soft)}
+.receipt .rh{font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:var(--ink2);text-align:center;padding-bottom:12px;margin-bottom:12px;border-bottom:2px dashed var(--pink-ghost)}
+.rline{display:flex;align-items:baseline;gap:10px;font-family:var(--mono);font-size:12px;padding:5px 0}
+.rline i{flex:1;border-bottom:2px dotted var(--pink-ghost);transform:translateY(-3px)}
+.rline b{font-weight:700}
+.rtot{border-top:2px dashed var(--pink-ghost);margin-top:10px;padding-top:12px;font-size:15px}
+.rtot b{color:var(--pink);font-size:19px}
+.rtot.flash b{animation:tpulse .45s}
+@keyframes tpulse{40%{transform:scale(1.25);display:inline-block}}
+
+/* ============ WHY ============ */
+#why{background:var(--bg3);border-top:2px dotted var(--pink-ghost)}
+.why-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(36px,6vw,90px)}
+.quote{font-family:var(--disp);font-style:italic;font-weight:480;font-size:clamp(28px,3.4vw,44px);line-height:1.18;letter-spacing:-.01em}
+.quote em{color:var(--pink);font-style:italic}
+.attr{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--ink2);margin-top:22px}
+.steps{margin-top:44px}
+.step{display:flex;gap:18px;padding:16px 4px;border-top:2px dotted var(--pink-ghost);align-items:baseline}
+.step b{font-family:var(--mono);font-size:11px;color:var(--pink);flex:0 0 auto}
+.step span{color:var(--ink2);font-size:15px}
+.step span strong{color:var(--ink)}
+.stats{display:flex;flex-direction:column}
+.stat{border-top:2px dotted var(--pink-ghost);padding:26px 4px}
+.stat .num{font-family:var(--disp);font-weight:800;font-size:clamp(52px,5.5vw,76px);letter-spacing:-.02em;color:var(--pink);line-height:1;font-variant-numeric:tabular-nums}
+.stat .num sup{font-size:.45em;font-weight:600}
+.stat .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--ink2);margin-top:10px}
+
+/* ============ VISIT ============ */
+#visit{background:var(--ink);color:var(--cream)}
+#visit .kick{color:var(--pink)}
+#visit .shead h2 em{color:var(--pink)}
+#visit .shead .lede{color:#C9A6B4}
+.vrow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto 40px;gap:22px;align-items:center;padding:30px 8px;border-top:2px dotted #4E2A3C;transition:background .2s;width:100%;text-align:left}
+.vrow:last-of-type{border-bottom:2px dotted #4E2A3C}
+.vrow:hover{background:rgba(255,79,123,.07)}
+.vname{font-family:var(--disp);font-weight:680;font-size:clamp(24px,3vw,38px);letter-spacing:-.01em;transition:transform .25s,color .25s}
+.vrow:hover .vname{transform:translateX(8px);color:var(--pink)}
+.vname small{display:block;font-family:var(--body);font-size:13px;color:#C9A6B4;font-weight:400;margin-top:6px;letter-spacing:0}
+.vmeta{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#C9A6B4;line-height:2}
+.vmeta b{color:var(--cream);font-weight:700}
+.vhours{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--pink);font-weight:700}
+.vgo{width:40px;height:40px;border-radius:50%;border:2px solid #4E2A3C;display:grid;place-items:center;color:var(--cream);transition:.25s}
+.vgo svg{width:15px;height:15px}
+.vrow:hover .vgo{border-color:var(--pink);background:var(--pink)}
+.cater{margin-top:52px;display:flex;flex-wrap:wrap;gap:22px;align-items:center;justify-content:space-between;border:2px dashed #4E2A3C;padding:26px 30px}
+.cater p{font-family:var(--disp);font-style:italic;font-size:clamp(19px,2.2vw,24px);max-width:520px}
+.cater .btn-ghost{border-color:var(--cream);color:var(--cream)}
+.cater .btn-ghost:hover{background:var(--cream);color:var(--ink)}
+
+/* ============ FOOTER ============ */
+footer{background:var(--pink);color:var(--cream)}
+.f-mark{font-family:var(--disp);font-weight:900;font-size:clamp(88px,21vw,320px);line-height:.9;letter-spacing:-.03em;display:flex;align-items:baseline;justify-content:center;gap:.03em;padding:clamp(40px,7vw,90px) 20px 20px;user-select:none}
+.f-mark span{display:inline-block;transition:transform .3s cubic-bezier(.3,1.8,.4,1)}
+.f-mark span:hover{transform:translateY(-.09em) rotate(-5deg)}
+.f-mark .cherry{width:.4em;height:.4em;transition:transform .3s cubic-bezier(.3,1.8,.4,1)}
+.f-mark .cherry:hover{transform:scale(1.35) rotate(14deg)}
+.f-bot{border-top:2px dashed rgba(255,246,241,.4);padding:22px 0;display:flex;flex-wrap:wrap;gap:16px 34px;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.18em}
+.f-bot .soc{display:flex;gap:10px}
+.f-bot .soc a{width:36px;height:36px;border-radius:50%;border:2px solid rgba(255,246,241,.5);display:grid;place-items:center;transition:.2s}
+.f-bot .soc a:hover{background:var(--cream);color:var(--pink);border-color:var(--cream)}
+.f-bot .soc svg{width:14px;height:14px}
+#toTop{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--cream)}
+#toTop svg{width:13px;height:13px}
+#toTop:hover{color:#fff}
+
+/* ============ TRAY (cart) ============ */
+#scrim{position:fixed;inset:0;z-index:2300;background:rgba(43,18,32,.4);opacity:0;pointer-events:none;transition:opacity .4s}
+#scrim.on{opacity:1;pointer-events:auto}
+#tray{position:fixed;top:0;right:0;bottom:0;z-index:2400;width:min(410px,94vw);background:var(--bg);border-left:2px solid var(--ink);transform:translateX(103%);transition:transform .5s cubic-bezier(.7,0,.2,1);display:flex;flex-direction:column}
+#tray.open{transform:none}
+.t-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:2px dashed var(--pink-ghost)}
+.t-head b{font-family:var(--disp);font-weight:800;font-size:24px}
+.t-close{width:38px;height:38px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;transition:.2s}
+.t-close:hover{background:var(--pink);border-color:var(--pink);color:#fff}
+.t-close svg{width:15px;height:15px}
+#trayBody{flex:1;overflow-y:auto;padding:10px 24px}
+.t-item{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:18px 0;border-bottom:2px dotted var(--pink-ghost)}
+.t-info b{font-family:var(--disp);font-weight:680;font-size:18px;display:block}
+.t-info small{font-family:var(--mono);font-size:9.5px;color:var(--ink2);letter-spacing:.06em;display:block;margin-top:5px;line-height:1.7}
+.t-qty{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13px;font-weight:700}
+.t-qty button{width:27px;height:27px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;transition:.15s}
+.t-qty button:hover{background:var(--pink);border-color:var(--pink);color:#fff}
+.t-qty button svg{width:11px;height:11px}
+.t-side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.t-side b{font-family:var(--mono);font-size:14px}
+.t-del{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--ink3);text-decoration:underline}
+.t-del:hover{color:var(--pink)}
+.t-empty{text-align:center;padding:70px 20px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.t-empty .cherry{width:44px;height:44px}
+.t-empty p{font-family:var(--disp);font-style:italic;font-size:21px;color:var(--ink2)}
+.t-foot{padding:20px 24px;border-top:2px dashed var(--pink-ghost)}
+.t-total{display:flex;justify-content:space-between;font-family:var(--mono);font-size:13px;margin-bottom:16px}
+.t-total b{font-size:20px;color:var(--pink)}
+.t-done{text-align:center;padding:60px 24px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.t-done .cherry{width:52px;height:52px}
+.t-done h4{font-family:var(--disp);font-weight:800;font-size:30px}
+.t-done p{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink2);line-height:2}
+
+/* ============ STRAW PROGRESS / CURSOR / TOASTS / POPS ============ */
+#straw{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:900;width:11px;height:36vh;border:2px solid var(--pink-ghost);border-radius:8px;background:rgba(255,255,255,.6);overflow:hidden}
+#straw i{position:absolute;left:0;right:0;top:0;height:0;background:var(--pink)}
+#straw::after{content:"";position:absolute;top:-2px;left:-8px;width:22px;height:14px;border:2px solid var(--pink);border-radius:6px 6px 0 0;background:var(--bg)}
+#toasts{position:fixed;right:18px;bottom:18px;z-index:2500;display:flex;flex-direction:column;gap:9px}
+.toast{display:flex;align-items:center;gap:11px;background:var(--ink);color:var(--cream);padding:13px 18px;border-radius:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;transform:translateX(24px);opacity:0;transition:.35s cubic-bezier(.2,1.4,.4,1);max-width:min(360px,90vw)}
+.toast.in{transform:none;opacity:1}
+.toast.out{opacity:0;transform:translateX(24px)}
+.toast svg{width:14px;height:14px;color:var(--pink);flex:0 0 auto}
+.gpop{position:fixed;z-index:2600;pointer-events:none;font-family:var(--mono);font-weight:700;font-size:13px;background:var(--pink);color:#fff;padding:7px 13px;border-radius:99px;animation:gpop .75s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes gpop{0%{transform:translate(-50%,-50%) scale(.4);opacity:0}25%{transform:translate(-50%,-90%) scale(1.15);opacity:1}100%{transform:translate(-50%,-260%) scale(1);opacity:0}}
+.cfp{position:fixed;z-index:2550;pointer-events:none;border-radius:2px}
+/* cursor */
+#curDot,#curRing{position:fixed;left:0;top:0;z-index:2600;pointer-events:none;opacity:0;transition:opacity .3s}
+body.cur #curDot,body.cur #curRing{opacity:1}
+body.cur{cursor:none}
+body.cur *{cursor:none}
+body.cur input,body.cur textarea{cursor:text}
+#curDot{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 2px #fff}
+#curRing{width:38px;height:38px;border-radius:50%;border:2px solid var(--pink);box-shadow:0 0 0 2px rgba(255,255,255,.9);display:grid;place-items:center;transition:width .25s,height .25s,background .25s,opacity .3s}
+#curRing span{font-family:var(--mono);font-size:8.5px;font-weight:700;letter-spacing:.16em;color:#fff;opacity:0;transition:opacity .2s}
+#curRing.big{width:58px;height:58px}
+#curRing.lab{width:64px;height:64px;background:var(--pink);border-color:var(--pink)}
+#curRing.lab span{opacity:1}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1000px){
+  .mix-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  .model-tag{display:none}
+  .vrow{grid-template-columns:1fr auto;row-gap:10px}
+  .vmeta{grid-column:1/-1}
+}
+@media(max-width:820px){
+  .rail{display:none}
+  #straw{display:none}
+  .cl{left:20px!important;right:20px!important;top:auto!important;bottom:96px;width:auto}
+  .cl::before,.cl::after{display:none}
+  .cl h3{font-size:23px}
+  .cl-c{left:50%!important;right:auto!important;top:50%!important;bottom:auto;width:min(480px,88vw)}
+  .mrow{grid-template-columns:38px minmax(0,1fr) auto;gap:12px}
+  .mgo{display:none}
+  .mlead{display:none}
+  .hero-copy{top:auto;bottom:120px;transform:none;max-width:88%}
+  h1{font-size:clamp(48px,13vw,84px)}
+  .f-bot{justify-content:center;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .mq-track{animation:none}
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- loader -->
+<div id="loader">
+  <div class="ld-in">
+    <div class="ld-logo">Bubloo 🧋</div>
+    <div class="ld-bar"><i id="ldFill"></i></div>
+    <div class="ld-meta"><span id="ldPct">0%</span> · <b>BLENDING</b></div>
+  </div>
+</div>
+
+<!-- nav -->
+<nav id="nav">
+  <div class="navin">
+    <a class="brand" href="#top" aria-label="Bubloo home">
+      <span style="font-size:20px">🧋</span>
+      <b>Bubloo</b>
+    </a>
+    <div class="nlinks">
+      <a href="#menu">MENU</a>
+      <a href="#mixer">MIXER</a>
+      <a href="#why">WHY</a>
+      <a href="#visit">VISIT</a>
+    </div>
+    <button class="btn btn-pink" id="navOrder"><i data-lucide="shopping-bag"></i>ORDER<span id="navBadge">0</span></button>
+  </div>
+</nav>
+
+<!-- ============ 01 · HERO + UNBLEND ============ -->
+<section id="unblend">
+  <div id="pin">
+    <canvas id="gl" data-cur="DRAG" aria-label="Interactive 3D milkshake — drag to spin, click to shake"></canvas>
+
+    <div class="no3d" id="no3dA">
+      <svg viewBox="0 0 200 260" fill="none">
+        <path d="M60 110 L140 110 L128 230 Q100 240 72 230 Z" fill="#FFDCE7" stroke="#B51D5B" stroke-width="4"/>
+        <path d="M66 130 L134 130 L126 218 Q100 226 74 218 Z" fill="#FF7D9C"/>
+        <ellipse cx="100" cy="106" rx="46" ry="24" fill="#FFF0F4" stroke="#B51D5B" stroke-width="3"/>
+        <circle cx="78" cy="88" r="20" fill="#FFF0F4"/><circle cx="122" cy="80" r="16" fill="#FFF0F4"/><circle cx="100" cy="62" r="12" fill="#FFF0F4"/>
+        <path d="M118 60 L152 8" stroke="#FF4F7B" stroke-width="9" stroke-linecap="round"/>
+        <path d="M96 50 C96 40 104 38 106 30" stroke="#B51D5B" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+        <circle cx="108" cy="46" r="9" fill="#C4163C"/>
+      </svg>
+      <p>3D UNAVAILABLE — IMAGINE IT WOBBLING</p>
+    </div>
+
+    <div class="hero-copy" id="heroCopy">
+      <span class="kick hfade">BUBLOO 🧋 — BOBA MILKSHAKES · DINDIGUL</span>
+      <h1>
+        <span class="hl"><span>PERFECTLY</span></span>
+        <span class="hl"><span><em>blended</em></span></span>
+        <span class="hl"><span>BOBA.</span></span>
+      </h1>
+      <p class="hero-sub hfade d1">Signature flavours. Perfectly blended. Made with love, served with pearls 🫧 <b>Scroll down</b> — discover what makes every sip unforgettable.</p>
+      <div class="hero-ctas hfade d2">
+        <a class="btn btn-pink" href="#mixer"><i data-lucide="plus"></i>BUILD YOUR BOBA</a>
+        <a class="btn btn-ghost" href="#menu">SEE THE MENU</a>
+      </div>
+    </div>
+
+    <div class="model-tag" id="modelTag">
+      MODEL — <b>THE Nº1 "STRAWBERRY BOBA"</b><br>
+      SCALE 1:1 · TAPIOCA PEARLS INSIDE<br>
+      <b>DRAG TO SPIN — CLICK TO SHAKE</b>
+    </div>
+
+    <!-- ingredient callouts (opacity driven by scroll) -->
+    <div class="cl cl-r" data-a=".10" data-b=".32" style="top:15%">
+      <span class="cl-k">PART 01 — THE TOPPING</span><h3>Boba pearls, handmade.</h3>
+      <p>Chewy, sweet, perfectly cooked. The soul of every Bubloo drink.</p>
+    </div>
+    <div class="cl cl-l" data-a=".22" data-b=".44" style="top:12%">
+      <span class="cl-k">PART 02 — THE STRAW</span><h3>Wide-bore, always.</h3>
+      <p>Big enough for the pearls, smooth enough for the sip.</p>
+    </div>
+    <div class="cl cl-r" data-a=".36" data-b=".60" style="top:38%">
+      <span class="cl-k">PART 03 — THE CREAM</span><h3>Whipped fresh daily.</h3>
+      <p>Slow-churned, barely sweetened, cloud-like perfection.</p>
+    </div>
+    <div class="cl cl-l" data-a=".50" data-b=".72" style="top:46%">
+      <span class="cl-k">PART 04 — THE FLAVOURS</span><h3>Signature blends.</h3>
+      <p>Each flavour crafted in-house. No artificial anything — ever.</p>
+    </div>
+    <div class="cl cl-r" data-a=".62" data-b=".84" style="top:60%">
+      <span class="cl-k">PART 05 — THE BASE</span><h3>Real milk, real fruit.</h3>
+      <p>Cold milk, fresh fruit. "Powder" is a word we don't use.</p>
+    </div>
+    <div class="cl cl-l" data-a=".66" data-b=".88" style="top:63%">
+      <span class="cl-k">PART 06 — THE CUP</span><h3>Sealed with love.</h3>
+      <p>Every cup sealed fresh. Shake it, pop the straw, enjoy.</p>
+    </div>
+    <div class="cl cl-c" data-a=".90" data-b="1">
+      <span class="cl-k">END OF SEQUENCE</span><h3>Back together.</h3>
+      <p>THE BUBLOO RITUAL — MADE WITH LOVE, SERVED WITH PEARLS</p>
+    </div>
+
+    <div class="rail" id="rail"></div>
+    <div class="scroll-hint" id="scrollHint"><span>SCROLL TO EXPLORE</span><i data-lucide="chevron-down"></i></div>
+    <div id="partTip"></div>
+  </div>
+</section>
+
+<!-- marquee -->
+<div class="mq" aria-hidden="true"><div class="mq-track" id="mqA"></div></div>
+
+<!-- ============ 02 · MENU ============ -->
+<section id="menu" class="sec">
+  <div class="wrap">
+    <header class="shead rv">
+      <span class="kick">02 — THE MENU</span>
+      <h2>Signature flavours.<br><em>Perfectly blended, always fresh.</em></h2>
+      <p class="lede">Every one crafted with the same stubborn rules: real ingredients, handmade boba pearls, nothing artificial. Tap a flavour and we'll load it into the mixer — spin it, dress it, sip it.</p>
+    </header>
+    <div class="menu-list rv" id="menuList"></div>
+    <p class="menu-note rv"><span style="font-size:18px">🧋</span> PRICES SHOWN FOR A REGULAR — THE MIXER LETS YOU GO FURTHER</p>
+  </div>
+</section>
+
+<!-- ============ 03 · MIXER ============ -->
+<section id="mixer" class="sec">
+  <div class="wrap">
+    <header class="shead rv">
+      <span class="kick">03 — THE MIXER</span>
+      <h2>Build your <em>boba.</em></h2>
+      <p class="lede">A live, spinning, honestly-very-fun preview. Pick a size, a flavour, pile on extras — the model and the price update as you go.</p>
+    </header>
+    <div class="mix-grid">
+      <div class="mix-stage rv" id="mixStage">
+        <div class="mix-circle"></div>
+        <div class="mix-ring"></div>
+        <canvas id="gl2" data-cur="DRAG" aria-label="Live 3D milkshake preview"></canvas>
+        <div class="mix-price"><span id="mixTotalBig">$7.20</span><small>AS CONFIGURED</small></div>
+        <div class="mix-cap">LIVE PREVIEW — DRAG TO SPIN · CLICK TO SHAKE</div>
+      </div>
+      <div class="mix-panel rv" style="--d:.12s">
+        <div class="opt"><span class="opt-k">SIZE</span><div class="chips" id="sizeChips"></div></div>
+        <div class="opt"><span class="opt-k">FLAVOUR</span><div class="chips" id="flavChips"></div></div>
+        <div class="opt"><span class="opt-k">EXTRAS</span><div class="chips" id="extraChips"></div></div>
+        <div class="receipt" id="mixRec"></div>
+        <button class="btn btn-pink big" id="addBtn"><i data-lucide="plus"></i>ADD TO ORDER — <span id="addPrice">$7.20</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 · WHY ============ -->
+<section id="why" class="sec">
+  <div class="wrap">
+    <div class="why-grid">
+      <div>
+        <header class="shead rv" style="margin-bottom:34px">
+          <span class="kick">04 — WHY BUBLOO</span>
+          <h2>Because it's<br><em>a craft,</em> not just a drink.</h2>
+        </header>
+        <p class="quote rv">"Every boba is a <em>little moment of joy.</em> We make sure yours is made with love."</p>
+        <p class="attr rv">— TEAM BUBLOO, DINDIGUL</p>
+        <div class="steps rv">
+          <div class="step"><b>01</b><span>We <strong>handmake</strong> our tapioca pearls. Always fresh, never pre-packaged.</span></div>
+          <div class="step"><b>02</b><span>The cream is <strong>whipped fresh daily</strong>, light and cloud-like.</span></div>
+          <div class="step"><b>03</b><span>Blended <strong>perfectly</strong>, served <strong>cold</strong>. Every cup sealed with care.</span></div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat rv"><div class="num"><span class="cnt" data-from="88" data-to="0">88</span></div><div class="lbl">ARTIFICIAL ANYTHINGS — WE COUNTED</div></div>
+        <div class="stat rv" style="--d:.08s"><div class="num"><span class="cnt" data-to="197">0</span><sup>+</sup></div><div class="lbl">HAPPY FOLLOWERS ON INSTAGRAM</div></div>
+        <div class="stat rv" style="--d:.16s"><div class="num"><span class="cnt" data-to="12">0</span></div><div class="lbl">SIGNATURE FLAVOURS IN ROTATION</div></div>
+        <div class="stat rv" style="--d:.24s"><div class="num"><span class="cnt" data-to="5000">0</span><sup>+</sup></div><div class="lbl">BOBAS SERVED WITH LOVE</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 · VISIT ============ -->
+<section id="visit" class="sec">
+  <div class="wrap">
+    <header class="shead rv">
+      <span class="kick">05 — VISIT US</span>
+      <h2>Find us in<br><em>Dindigul.</em></h2>
+      <p class="lede">Fresh boba, great vibes, and the warmest welcome in town. DM us for bulk orders — weddings & parties welcome! 📩</p>
+    </header>
+    <div class="rv">
+      <button class="vrow" onclick="window.open('https://www.instagram.com/bubloo_dgl/','_blank')">
+        <span class="vname">Bubloo — Dindigul<small>📍 Dindigul, Tamil Nadu — the original</small></span>
+        <span class="vmeta"><b>MON – SUN</b><br>10:00 – 22:00</span>
+        <span class="vhours">FRESHLY BLENDED</span>
+        <span class="vgo"><i data-lucide="arrow-up-right"></i></span>
+      </button>
+      <button class="vrow" onclick="window.open('https://www.instagram.com/bubloo_dgl/','_blank')">
+        <span class="vname">DM for Bulk Orders<small>Weddings, parties, events — we deliver happiness 🧋</small></span>
+        <span class="vmeta"><b>DM US</b><br>@bubloo_dgl</span>
+        <span class="vhours">ALWAYS READY</span>
+        <span class="vgo"><i data-lucide="arrow-up-right"></i></span>
+      </button>
+    </div>
+    <div class="cater rv">
+      <p>Weddings, birthdays, celebrations — we bring the boba party to you! 🧋</p>
+      <a class="btn btn-ghost" href="https://www.instagram.com/bubloo_dgl/" target="_blank"><i data-lucide="instagram"></i>@BUBLOO_DGL</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="mq rev" aria-hidden="true" style="background:transparent;border-bottom:2px dashed rgba(255,246,241,.35)"><div class="mq-track" id="mqB"></div></div>
+  <div class="f-mark" aria-label="Bubloo">
+    <span>B</span><span>u</span><span>b</span><span>l</span><span>o</span><span>o</span>
+    <span style="font-size:0.5em">🧋</span>
+  </div>
+  <div class="wrap">
+    <div class="f-bot">
+      <span>© 2025 BUBLOO 🧋 BOBA MILKSHAKES</span>
+      <span>MADE WITH LOVE, SERVED WITH PEARLS · DINDIGUL</span>
+      <div class="soc">
+        <a href="https://www.instagram.com/bubloo_dgl/" target="_blank" rel="noopener" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+        <a href="https://www.instagram.com/bubloo_dgl/" target="_blank" rel="noopener" aria-label="DM us"><i data-lucide="send"></i></a>
+        <a href="https://www.instagram.com/bubloo_dgl/" target="_blank" aria-label="Follow us"><i data-lucide="heart"></i></a>
+      </div>
+      <button id="toTop">BACK TO TOP<i data-lucide="arrow-up"></i></button>
+    </div>
+  </div>
+</footer>
+
+<!-- tray / cart -->
+<div id="scrim"></div>
+<aside id="tray" role="dialog" aria-label="Your order">
+  <div class="t-head"><b>YOUR ORDER</b><button class="t-close" id="trayClose" aria-label="Close order"><i data-lucide="x"></i></button></div>
+  <div id="trayBody"></div>
+  <div class="t-foot" id="trayFoot"></div>
+</aside>
+
+<!-- straw progress / toasts / cursor -->
+<div id="straw" aria-hidden="true"><i id="strawFill"></i></div>
+<div id="toasts"></div>
+<div id="curDot"></div><div id="curRing"><span id="curTxt"></span></div>
+
+<!-- floating flavor splat -->
+<div id="mfloat"><svg viewBox="0 0 100 100"><path id="mfsplat" d="M46 8 C60 2 74 10 82 22 C94 30 96 46 88 58 C92 72 82 86 68 88 C58 96 40 96 32 86 C18 86 8 74 10 60 C2 48 6 32 18 24 C24 12 34 12 46 8 Z"/></svg><span id="mfname"></span></div>
+
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}
+</script>
+<script type="module">
+/* ================================================================
+   GULP. — one file, one blender, zero shortcuts
+   ================================================================ */
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,k)=>a+(b-a)*k;
+const ss=(a,b,x)=>{const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t)};
+const easeOutBack=t=>{const c=1.70158;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const icons=()=>{try{window.lucide&&window.lucide.createIcons()}catch{}};
+const isTyping=e=>e.target&&e.target.closest&&e.target.closest('input,textarea,select');
+const CHERRY=`<span style="font-size:20px">🧋</span>`;
+
+/* ---------- toasts ---------- */
+function toast(msg,ic='check'){
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<i data-lucide="${ic}"></i><span>${msg}</span>`;
+  $('#toasts').append(t);icons();
+  requestAnimationFrame(()=>t.classList.add('in'));
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),380)},3400);
+}
+
+/* ---------- gloop pop ---------- */
+const GLOOPS=['boba!','slurp!','sploosh!','yum!','shake!'];
+function gpop(x,y){
+  const d=document.createElement('div');d.className='gpop';
+  d.textContent=GLOOPS[Math.random()*GLOOPS.length|0];
+  d.style.left=x+'px';d.style.top=y+'px';
+  document.body.append(d);setTimeout(()=>d.remove(),780);
+}
+
+/* ---------- sprinkle confetti ---------- */
+function confetti(x,y,n=28){
+  const cols=['#FF4F7B','#FFD9A0','#FFFFFF','#B51D5B','#FF9DB6'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('i');el.className='cfp';
+    const s=5+Math.random()*5;
+    el.style.cssText=`left:${x}px;top:${y}px;width:${s}px;height:${s*1.7}px;background:${cols[i%cols.length]}`;
+    document.body.append(el);
+    const dx=(Math.random()-.5)*280, dy=-(70+Math.random()*190), r=(Math.random()-.5)*720;
+    el.animate([
+      {transform:'translate(0,0) rotate(0deg)',opacity:1},
+      {transform:`translate(${dx}px,${dy}px) rotate(${r/2}deg)`,opacity:1,offset:.45},
+      {transform:`translate(${dx*1.25}px,${dy+230+Math.random()*120}px) rotate(${r}deg)`,opacity:0}
+    ],{duration:850+Math.random()*550,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>el.remove();
+  }
+}
+
+/* ---------- marquees ---------- */
+(()=>{
+  const words=['NOW SERVING','BOBA MILKSHAKES','SIGNATURE FLAVOURS','MADE WITH LOVE','SERVED WITH PEARLS','DINDIGUL\'S FINEST'];
+  const mk=()=>`<div>${words.map(w=>`<span>${w}</span>${CHERRY}`).join('')}</div>`;
+  $('#mqA').innerHTML=mk()+mk();
+  $('#mqB').innerHTML=`<div>${Array(6).fill(`<span>SIP THE MAGIC 🧋</span><span style="font-size:18px">🧋</span>`).join('')}</div>`.repeat(2).replace('</div><div','</div>\n<div');
+})();
+
+/* ---------- reveals + count-ups ---------- */
+const rvIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rvIO.unobserve(e.target)}}),{threshold:.15});
+ $$('.rv').forEach(el=>rvIO.observe(el));
+const cntIO=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;cntIO.unobserve(e.target);
+  const el=e.target,from=+(el.dataset.from||0),to=+el.dataset.to,t0=performance.now(),D=1500;
+  (function tick(){
+    const k=clamp((performance.now()-t0)/D,0,1),v=Math.round(lerp(from,to,1-Math.pow(1-k,3)));
+    el.textContent=v.toLocaleString('en-US');
+    if(k<1)requestAnimationFrame(tick);
+  })();
+}),{threshold:.6});
+ $$('.cnt').forEach(el=>cntIO.observe(el));
+
+/* ---------- scroll: straw + nav + unblend progress ---------- */
+const SEC=$('#unblend'),PIN=$('#pin');
+let pRaw=0,pS=0,secTop=0,secH=1,domP=-1;
+function measure(){secTop=SEC.offsetTop;secH=SEC.offsetHeight;onScroll();}
+function onScroll(){
+  pRaw=clamp((scrollY-secTop)/Math.max(1,secH-innerHeight),0,1);
+  const doc=document.documentElement;
+  $('#strawFill').style.height=(clamp(scrollY/(doc.scrollHeight-innerHeight||1),0,1)*100)+'%';
+  $('#nav').classList.toggle('scrolled',scrollY>40);
+}
+addEventListener('scroll',onScroll,{passive:true});
+addEventListener('resize',()=>{measure()});
+addEventListener('load',()=>{measure();setTimeout(measure,900)});
+measure();
+
+/* ---------- stage rail ---------- */
+const STAGES=[['WHOLE',0],['THE BOBA',.12],['THE STRAW',.26],['THE CREAM',.40],['FLAVOURS',.55],['THE BASE',.68],['REBUILT',.95]];
+(()=>{
+  const rail=$('#rail');
+  STAGES.forEach(([label,v])=>{
+    const b=document.createElement('button');
+    b.innerHTML=`<i></i><span>${label}</span>`;
+    b.onclick=()=>scrollTo({top:secTop+v*(secH-innerHeight),behavior:'smooth'});
+    rail.append(b);
+  });
+})();
+function updRail(){
+  let idx=0;STAGES.forEach(([_,v],i)=>{if(pS>=v-.001)idx=i});
+  $$('#rail button').forEach((b,i)=>b.classList.toggle('on',i===idx));
+}
+
+/* ---------- callouts + hero DOM ---------- */
+const CLS=$$('.cl');
+function updDom(){
+  for(const el of CLS){
+    const a=+el.dataset.a,b=+el.dataset.b;
+    const ain=ss(a,a+.05,pS);
+    const al=ain*(1-ss(b-.05,b,pS));
+    el.style.setProperty('--o',al.toFixed(3));
+    const fromR=el.classList.contains('cl-r')||el.classList.contains('cl-c');
+    el.style.setProperty('--tx',((fromR?26:-26)*(1-ain)).toFixed(1)+'px');
+    el.style.setProperty('--ty',(16*(1-ain)).toFixed(1)+'px');
+  }
+  const hc=1-ss(.005,.06,pS);
+  const hcp=$('#heroCopy');
+  hcp.style.opacity=hc;hcp.style.transform=`translateY(${(-60*(1-hc)).toFixed(0)}px)`;
+  hcp.classList.toggle('gone',hc<.04);
+  const fade=1-ss(.02,.06,pS);
+  $('#scrollHint').style.opacity=fade;$('#modelTag').style.opacity=fade;
+  updRail();
+}
+
+/* ---------- custom cursor ---------- */
+let MX=0,MY=0,curX=0,curY=0,curBig=false,curLab='';
+const finePointer=matchMedia('(pointer:fine)').matches;
+if(finePointer){
+  document.body.classList.add('cur');
+  addEventListener('mousemove',e=>{
+    MX=(e.clientX/innerWidth-.5)*2;MY=(e.clientY/innerHeight-.5)*2;
+    curX=e.clientX;curY=e.clientY;
+    const t=e.target.closest?.('a,button,.chip,label,input,select,textarea');
+    curBig=!!t;
+    const lt=e.target.closest?.('[data-cur]');
+    curLab=lt?lt.dataset.cur:'';
+  });
+  document.addEventListener('mouseleave',()=>{$('#curDot').style.opacity=0;$('#curRing').style.opacity=0});
+  document.addEventListener('mouseenter',()=>{$('#curDot').style.opacity=1;$('#curRing').style.opacity=1});
+}
+function cursorFrame(){
+  if(!finePointer)return;
+  $('#curDot').style.transform=`translate(${curX}px,${curY}px) translate(-50%,-50%)`;
+  ring.x=lerp(ring.x??curX,curX,.18);ring.y=lerp(ring.y??curY,curY,.18);
+  const r=$('#curRing');
+  r.style.transform=`translate(${ring.x}px,${ring.y}px) translate(-50%,-50%)`;
+  r.classList.toggle('lab',!!curLab);
+  r.classList.toggle('big',curBig&&!curLab);
+  if(curLab)$('#curTxt').textContent=curLab;
+}
+
+/* ================================================================
+   FLAVOURS + MENU
+   ================================================================ */
+const FLAVORS=[
+ {id:'vanilla',   name:'Classic Vanilla Boba',   note:'Creamy vanilla with chewy tapioca pearls. The OG.',       price:0,  liquid:'#F1E3C8',cream:'#FBF4E6',dot:'#E3BC7E',sprk:['#F1E3C8','#FFFFFF','#FFD9A0','#E3BC7E']},
+ {id:'strawberry',name:'Strawberry Boba',       note:'Fresh strawberry blend with boba pearls. A Bubloo classic.',price:.5,liquid:'#FF7D9C',cream:'#FFF0F4',dot:'#FF4F7B',sprk:['#FF4F7B','#FFFFFF','#FFD9A0','#B51D5B']},
+ {id:'chocolate', name:'Choco Boba Storm',      note:'Rich chocolate milkshake with tapioca pearls. Addictive.', price:.6,liquid:'#5C3624',cream:'#E4CDBB',dot:'#4A2C1E',sprk:['#F5E6D0','#FFFFFF','#B98156','#6B4230']},
+ {id:'matcha',    name:'Matcha Boba Dream',     note:'Premium matcha with brown sugar boba. Zen in a cup.',      price:.8,liquid:'#A9C69B',cream:'#F0F4E8',dot:'#7BA86A',sprk:['#FFFFFF','#FFD9A0','#BFD8B0','#7BA86A']},
+ {id:'bluemoon',  name:'Blue Moon Boba',        note:'Mystery flavour with popping boba. Tastes like magic.',    price:.8,liquid:'#8FB5E8',cream:'#EEF4FB',dot:'#6E9BD8',sprk:['#FFFFFF','#A9C8EE','#FFD9A0','#6E9BD8']},
+ {id:'mango',     name:'Mango Boba Sunrise',    note:'Alphonso mango pulp with tapioca pearls. Summer vibes.',   price:.6,liquid:'#FFAF5E',cream:'#FFF2DF',dot:'#F08A2A',sprk:['#F08A2A','#FFFFFF','#FFD9A0','#FFAF5E']},
+ {id:'pistachio', name:'Pista Rose Boba',       note:'Pistachio cream with rose-infused boba. Elegant.',        price:.9,liquid:'#C7CE9C',cream:'#F2F1DF',dot:'#A3AC72',sprk:['#FFFFFF','#FFD9A0','#C7CE9C','#A3AC72']},
+ {id:'caramel',   name:'Caramel Crunch Boba',   note:'Salted caramel with brown sugar boba. Irresistible.',      price:.6,liquid:'#DE9B57',cream:'#FBEBD6',dot:'#C17A33',sprk:['#C17A33','#FFFFFF','#FFD9A0','#6B4230']},
+];
+const flavorOf=id=>FLAVORS.find(f=>f.id===id)||FLAVORS[1];
+
+/* menu list */
+(()=>{
+  const list=$('#menuList');
+  FLAVORS.forEach((f,i)=>{
+    const b=document.createElement('button');
+    b.className='mrow';b.dataset.flavor=f.id;b.dataset.cur='MIX IT';
+    b.innerHTML=`<span class="mnum">0${i+1}</span>
+      <span class="mname"><span class="mname-in"><b>${f.name}</b><small>${f.note}</small></span><span class="mlead"></span></span>
+      <span class="mprice">$${(5.5+f.price).toFixed(2)}</span>
+      <span class="mgo"><i data-lucide="plus"></i></span>`;
+    b.onclick=()=>{selectFlavor(f.id);scrollTo({top:$('#mixer').offsetTop-70,behavior:'smooth'});toast(`${f.name} loaded in the mixer`,'check');};
+    list.append(b);
+  });
+  icons();
+})();
+
+/* floating splat */
+const mfloat=$('#mfloat');let mfActive=false,mfX=0,mfY=0;
+(()=>{
+  const zone=$('#menuList');
+  zone.addEventListener('mouseover',e=>{
+    const row=e.target.closest('.mrow');if(!row)return;
+    const f=flavorOf(row.dataset.flavor);
+    $('#mfsplat').setAttribute('fill',f.dot);
+    $('#mfname').textContent=f.name.toUpperCase();
+    mfloat.classList.add('on');mfActive=true;
+  });
+  zone.addEventListener('mouseleave',()=>{mfloat.classList.remove('on');mfActive=false});
+  addEventListener('mousemove',e=>{if(mfActive){mfX=e.clientX;mfY=e.clientY}});
+})();
+function floatFrame(){
+  if(!mfActive)return;
+  mfloat._x=lerp(mfloat._x??mfX,mfX,.16);mfloat._y=lerp(mfloat._y??mfY,mfY,.16);
+  mfloat.style.transform=`translate(${mfloat._x}px,${mfloat._y}px) translate(-50%,-118%)`;
+}
+
+/* ================================================================
+   MIXER — state + receipt + cart
+   ================================================================ */
+const SIZES={S:['Small',4.5],M:['Regular',5.5],L:['Massive',6.9]};
+const EXTRAS=[
+ {id:'sprinkles',name:'Rainbow sprinkles',price:.5,on:true},
+ {id:'cherry',   name:'Boba pearls extra',price:.7,on:true},
+ {id:'shards',   name:'Chocolate shards', price:.9,on:false},
+ {id:'cream',    name:'Double cream',     price:1.2,on:false},
+ {id:'straw',    name:'Wide-bore straw',  price:0,  on:true},
+];
+const MIX={size:'M',flavor:'strawberry',extras:new Set(EXTRAS.filter(e=>e.on).map(e=>e.id))};
+let mixer3d=null;
+
+function mixPrice(){
+  let total=SIZES[MIX.size][1]+flavorOf(MIX.flavor).price;
+  EXTRAS.forEach(e=>{if(MIX.extras.has(e.id))total+=e.price});
+  return total;
+}
+function buildReceipt(){
+  const f=flavorOf(MIX.flavor);
+  let rows=`<div class="rh">BUBLOO 🧋 — THE MIXER — YOUR BUILD</div>`;
+  rows+=rline(SIZES[MIX.size][0].toUpperCase(),SIZES[MIX.size][1]);
+  if(f.price>0)rows+=rline(f.name.toUpperCase(),f.price);
+  EXTRAS.forEach(e=>{if(MIX.extras.has(e.id)&&e.price>0)rows+=rline(e.name.toUpperCase(),e.price)});
+  if(MIX.extras.has('straw'))rows+=rline('PAPER STRAW','FREE');
+  const total=mixPrice();
+  rows+=`<div class="rline rtot"><span>TOTAL</span><i></i><b>$${total.toFixed(2)}</b></div>`;
+  $('#mixRec').innerHTML=rows;
+  $('#mixTotalBig').textContent='$'+total.toFixed(2);
+  $('#addPrice').textContent='$'+total.toFixed(2);
+  const rt=$('.rtot');if(rt){rt.classList.remove('flash');void rt.offsetWidth;rt.classList.add('flash')}
+}
+const rline=(n,p)=>`<div class="rline"><span>${n}</span><i></i><b>${typeof p==='number'?'$'+p.toFixed(2):p}</b></div>`;
+
+function buildChips(){
+  const sz=$('#sizeChips');sz.innerHTML='';
+  Object.entries(SIZES).forEach(([k,[n]])=>{
+    const b=document.createElement('button');b.className='chip'+(MIX.size===k?' on':'');
+    b.textContent=n.toUpperCase();
+    b.onclick=()=>{MIX.size=k;buildChips();buildReceipt();mixer3d&&mixer3d.setSize(k)};
+    sz.append(b);
+  });
+  const fc=$('#flavChips');fc.innerHTML='';
+  FLAVORS.forEach(f=>{
+    const b=document.createElement('button');b.className='chip'+(MIX.flavor===f.id?' on':'');
+    b.innerHTML=`<i class="dot" style="background:${f.dot}"></i>${f.name.toUpperCase()}`;
+    b.onclick=()=>selectFlavor(f.id);
+    fc.append(b);
+  });
+  const ec=$('#extraChips');ec.innerHTML='';
+  EXTRAS.forEach(e=>{
+    const b=document.createElement('button');b.className='chip'+(MIX.extras.has(e.id)?' on':'');
+    b.innerHTML=`${e.name.toUpperCase()}${e.price?` +$${e.price.toFixed(2)}`:' · FREE'}`;
+    b.onclick=()=>{
+      MIX.extras.has(e.id)?MIX.extras.delete(e.id):MIX.extras.add(e.id);
+      buildChips();buildReceipt();mixer3d&&mixer3d.setToggles(MIX.extras);
+    };
+    ec.append(b);
+  });
+}
+function selectFlavor(id){
+  MIX.flavor=id;
+  buildChips();buildReceipt();
+  mixer3d&&mixer3d.setFlavor(flavorOf(id));
+}
+
+/* ---------- cart ---------- */
+let CART=[];
+try{CART=JSON.parse(localStorage.getItem('gulp.cart')||'[]')}catch{}
+const saveCart=()=>{try{localStorage.setItem('gulp.cart',JSON.stringify(CART))}catch{}};
+const cartCount=()=>CART.reduce((a,c)=>a+c.qty,0);
+function updBadge(pulse){
+  const n=cartCount(),b=$('#navBadge');
+  b.textContent=n;b.classList.toggle('on',n>0);
+  if(pulse&&n>0){b.classList.remove('pulse');void b.offsetWidth;b.classList.add('pulse')}
+}
+const EXNAME={sprinkles:'sprinkles',cherry:'cherry',shards:'choc shards',cream:'dbl cream',straw:'paper straw'};
+function renderTray(){
+  const body=$('#trayBody'),foot=$('#trayFoot');
+  if(!CART.length){
+    body.innerHTML=`<div class="t-empty">${CHERRY}<p>Nothing here yet.<br>The fixes are upstream.</p><button class="btn btn-pink" id="tGo">CRAFT A SHAKE</button></div>`;
+    foot.innerHTML='';
+    icons();
+    $('#tGo').onclick=()=>{closeTray();scrollTo({top:$('#mixer').offsetTop-70,behavior:'smooth'})};
+    return;
+  }
+  body.innerHTML=CART.map(c=>`
+    <div class="t-item">
+      <div class="t-qty">
+        <button data-act="dec" data-id="${c.id}" aria-label="Less"><i data-lucide="minus"></i></button>
+        <span>${c.qty}</span>
+        <button data-act="inc" data-id="${c.id}" aria-label="More"><i data-lucide="plus"></i></button>
+      </div>
+      <div class="t-info"><b>${flavorOf(c.flavor).name}</b>
+        <small>${SIZES[c.size][0].toUpperCase()}${c.extras.length?' · +'+c.extras.map(e=>EXNAME[e]).join(' · +'):''}</small></div>
+      <div class="t-side"><b>$${(c.unit*c.qty).toFixed(2)}</b><button class="t-del" data-act="del" data-id="${c.id}">REMOVE</button></div>
+    </div>`).join('');
+  const total=CART.reduce((a,c)=>a+c.unit*c.qty,0);
+  foot.innerHTML=`<div class="t-total"><span>SUBTOTAL</span><b>$${total.toFixed(2)}</b></div>
+    <button class="btn btn-pink big" id="checkout"><i data-lucide="check"></i>CHECKOUT</button>`;
+  icons();
+  $('#checkout').onclick=doCheckout;
+}
+ $('#trayBody').addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const it=CART.find(c=>c.id===b.dataset.id);if(!it)return;
+  if(b.dataset.act==='inc')it.qty++;
+  if(b.dataset.act==='dec'){it.qty--;if(it.qty<1)CART=CART.filter(c=>c!==it)}
+  if(b.dataset.act==='del')CART=CART.filter(c=>c!==it);
+  saveCart();renderTray();updBadge();
+});
+function addToCart(){
+  const extras=[...MIX.extras];
+  const id=`${MIX.size}|${MIX.flavor}|${extras.sort().join(',')}`;
+  const ex=CART.find(c=>c.id===id);
+  if(ex)ex.qty++;
+  else CART.push({id,size:MIX.size,flavor:MIX.flavor,extras,unit:mixPrice(),qty:1});
+  saveCart();renderTray();updBadge(true);
+  const r=$('#addBtn').getBoundingClientRect();
+  confetti(r.left+r.width/2,r.top+r.height/2,30);
+  toast(`${flavorOf(MIX.flavor).name} — added to your order`,'shopping-bag');
+}
+function doCheckout(){
+  if(!CART.length)return;
+  const num='G-'+(1000+Math.floor(Math.random()*9000));
+  const r=$('#trayFoot').getBoundingClientRect();
+  confetti(r.left+r.width/2,r.top+20,44);
+  CART=[];saveCart();updBadge();
+  $('#trayBody').innerHTML=`<div class="t-done">${CHERRY}
+    <h4>Order ${num}</h4>
+    <p>READY IN ~12 MINUTES<br>SHOW THIS AT THE COUNTER<br>THANK YOU, SERIOUSLY.</p>
+    <button class="btn btn-ghost" id="tNew">START A NEW ORDER</button></div>`;
+  $('#trayFoot').innerHTML='';
+  icons();
+  $('#tNew').onclick=()=>{renderTray();closeTray()};
+  toast(`Order ${num} — see you at the counter!`,'check');
+}
+function openTray(){renderTray();$('#tray').classList.add('open');$('#scrim').classList.add('on')}
+function closeTray(){$('#tray').classList.remove('open');$('#scrim').classList.remove('on')}
+ $('#navOrder').onclick=openTray;$('#trayClose').onclick=closeTray;$('#scrim').onclick=closeTray;
+addEventListener('keydown',e=>{if(e.key==='Escape')closeTray()});
+updBadge();
+
+ $('#addBtn').onclick=addToCart;
+ $('#toTop').onclick=()=>scrollTo({top:0,behavior:'smooth'});
+buildChips();buildReceipt();
+
+/* ================================================================
+   3D — the milkshake, built from scratch
+   ================================================================ */
+let sceneA=null,sceneB=null;
+const threeReady=new Promise(res=>{
+  (async()=>{
+    let THREE=null;
+    try{THREE=await import('three')}catch{res('fail')}
+    if(!THREE){res('fail');return}
+    try{
+      sceneA=initSceneA(THREE);
+      sceneB=initSceneB(THREE);
+      mixer3d=sceneB.api;
+      sceneB.api.setFlavor(flavorOf(MIX.flavor));
+      sceneB.api.setSize(MIX.size);
+      sceneB.api.setToggles(MIX.extras);
+    }catch(err){console.warn('3D init failed:',err)}
+    res('ok');
+  })();
+});
+
+/* ---------- shared texture / geometry helpers ---------- */
+function makeEnv(THREE,renderer){
+  const pm=new THREE.PMREMGenerator(renderer);
+  const env=new THREE.Scene();
+  const geo=new THREE.PlaneGeometry(1,1);
+  const panel=(w,h,c,i,pos,rot)=>{
+    const m=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:new THREE.Color(c).multiplyScalar(i),side:THREE.DoubleSide}));
+    m.scale.set(w,h,1);m.position.set(...pos);m.rotation.set(...rot);env.add(m);
+  };
+  panel(10,10,'#ffffff',4.5,[0,6,0],[Math.PI/2,0,0]);
+  panel(8,5,'#FF9DB6',2.2,[-7,2,0],[0,Math.PI/2,0]);
+  panel(8,5,'#FFF3E8',1.6,[7,2,0],[0,-Math.PI/2,0]);
+  panel(10,6,'#FFD7E2',1.1,[0,2,-7],[0,0,0]);
+  panel(10,6,'#2B1220',.6,[0,-1,7],[0,Math.PI,0]);
+  const tex=pm.fromScene(env,.05).texture;
+  pm.dispose();
+  return tex;
+}
+function strawTexture(THREE){
+  const c=document.createElement('canvas');c.width=c.height=128;
+  const x=c.getContext('2d');
+  x.fillStyle='#FFFFFF';x.fillRect(0,0,128,128);
+  x.save();x.translate(64,64);x.rotate(Math.PI/4);x.fillStyle='#FF4F7B';
+  for(let i=-180;i<180;i+=34)x.fillRect(i,-130,15,260);
+  x.restore();
+  const t=new THREE.CanvasTexture(c);
+  t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,2);
+  t.colorSpace=THREE.SRGBColorSpace;
+  return t;
+}
+function blobShadowTex(THREE){
+  const c=document.createElement('canvas');c.width=c.height=256;
+  const x=c.getContext('2d');
+  const g=x.createRadialGradient(128,128,20,128,128,126);
+  g.addColorStop(0,'rgba(58,22,38,.5)');g.addColorStop(1,'rgba(58,22,38,0)');
+  x.fillStyle=g;x.fillRect(0,0,256,256);
+  const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
+  return t;
+}
+/* one milkshake, many purposes — scene A explodes it, scene B configures it */
+function buildShake(THREE,opts={}){
+  const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+  const PUFFS=[
+    {r:.62,y:1.98,x:0,  sy:.62},{r:.53,y:2.30,x:.05,sy:.60},
+    {r:.44,y:2.58,x:-.04,sy:.60},{r:.34,y:2.80,x:.03,sy:.62},
+    {r:.21,y:2.98,x:0,  sy:.80},{r:.11,y:3.16,x:0,  sy:1.9},
+  ];
+  const mats={
+    glass:new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.22,roughness:.06,metalness:0,clearcoat:1,clearcoatRoughness:.08,envMapIntensity:1.25,depthWrite:false,side:THREE.DoubleSide}),
+    liquid:new THREE.MeshPhysicalMaterial({color:new THREE.Color(opts.liquid||'#FF7D9C'),roughness:.32,clearcoat:.5,clearcoatRoughness:.35,envMapIntensity:.7}),
+    cream:new THREE.MeshPhysicalMaterial({color:new THREE.Color(opts.cream||'#FFF0F4'),roughness:.55,sheen:1,sheenRoughness:.45,sheenColor:new THREE.Color('#ffffff'),envMapIntensity:.55}),
+    cherry:new THREE.MeshPhysicalMaterial({color:new THREE.Color('#C4163C'),roughness:.22,clearcoat:1,clearcoatRoughness:.12,envMapIntensity:1}),
+    straw:new THREE.MeshPhysicalMaterial({map:strawTexture(THREE),roughness:.45,clearcoat:.4,envMapIntensity:.8}),
+    choc:new THREE.MeshPhysicalMaterial({color:new THREE.Color('#3B2214'),roughness:.28,clearcoat:.8,clearcoatRoughness:.25,envMapIntensity:.9}),
+    sprk:new THREE.MeshPhysicalMaterial({roughness:.35,clearcoat:.5,envMapIntensity:.8}),
+    stem:new THREE.MeshStandardMaterial({color:0x6B4030,roughness:.6}),
+  };
+  const partsGroup=new THREE.Group();
+  const parts=[],byKey={};
+  function addPart(p){parts.push(p);byKey[p.key]=p;partsGroup.add(p.obj)}
+  function part(key,obj,homeP,homeR,outP,outR,range,spin){
+    obj.position.copy(homeP);obj.rotation.set(...homeR);
+    obj.userData.part=key;
+    return{key,obj,homeP:homeP.clone(),homeR:[...homeR],outP,outR,range,spin:spin||0,phase:Math.random()*6.28,hoverS:1,fan:[]};
+  }
+  /* GLASS */
+  const glassPts=[[.001,.05],[.50,.06],[.58,.5],[.66,1.35],[.72,1.95],[.74,2.15],[.66,2.15],[.64,1.95],[.58,1.35],[.50,.5],[.42,.07],[.001,.09]]
+    .map(p=>new THREE.Vector2(p[0],p[1]));
+  const glass=new THREE.Mesh(new THREE.LatheGeometry(glassPts,48),mats.glass);
+  glass.renderOrder=6;
+  addPart(part('glass',glass,V(0,0,0),[0,0,0],V(0,-.5,0),[-.12,0,.5],[.66,.88],0));
+  /* LIQUID */
+  const liqPts=[[.001,.10],[.40,.11],[.46,.5],[.55,1.35],[.60,1.85],[.52,1.98],[.30,2.06],[.001,2.08]]
+    .map(p=>new THREE.Vector2(p[0],p[1]));
+  const liquid=new THREE.Mesh(new THREE.LatheGeometry(liqPts,40),mats.liquid);
+  addPart(part('liquid',liquid,V(0,0,0),[0,0,0],V(0,1.15,0),[.18,0,.12],[.62,.84],.5));
+  /* CREAM (soft-serve puffs) */
+  const cream=new THREE.Group();
+  PUFFS.forEach((p,i)=>{
+    const s=new THREE.Mesh(new THREE.SphereGeometry(p.r,28,20),mats.cream);
+    s.position.set(p.x,p.y-2.5,0);s.scale.set(1,p.sy,1);
+    cream.add(s);
+    return{obj:s,home:s.position.clone()};
+  });
+  const creamFan=[];
+  [...cream.children].forEach((s,i)=>{
+    creamFan.push({obj:s,home:s.position.clone(),
+      out:V(s.position.x+Math.sin(i*2.1)*(.42+.08*i),s.position.y+.30+.30*i,s.position.z+Math.cos(i*2.1)*(.42+.08*i)),
+      st:i*.015});
+  });
+  const creamPart=part('cream',cream,V(0,2.5,0),[0,0,0],V(0,3.7,0),[0,2.6,0],[.34,.58],0);
+  creamPart.fan=creamFan;addPart(creamPart);
+  /* SPRINKLES (instanced, pivot at cream centre) */
+  const N=120;
+  const sprkGeo=new THREE.CapsuleGeometry(.02,.055,3,8);
+  const im=new THREE.InstancedMesh(sprkGeo,mats.sprk,N);
+  im.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  im.frustumCulled=false;im.position.set(0,2.5,0);im.userData.part='sprinkles';
+  const sprk={base:[],dir:[],dist:[],quat:[],axis:[],spd:[],rot:[]};
+  const weights=PUFFS.map(p=>p.r*p.r);
+  const wSum=weights.reduce((a,b)=>a+b);
+  const M4=new THREE.Matrix4(),QT=new THREE.Quaternion(),SV=new THREE.Vector3(1,1,1),PV=new THREE.Vector3();
+  for(let i=0;i<N;i++){
+    let pick=Math.random()*wSum,pi=0;
+    for(;pi<weights.length-1;pi++){pick-=weights[pi];if(pick<=0)break}
+    const p=PUFFS[pi];
+    const a=Math.random()*Math.PI*2,el=(Math.random()-.25)*1.2;
+    const bx=p.x+Math.cos(a)*p.r*.92,bz=Math.sin(a)*p.r*.92,by=(p.y-2.5)+Math.sin(el)*p.r*.55;
+    sprk.base.push(new THREE.Vector3(bx,by,bz));
+    const d=new THREE.Vector3(bx*1.3,.55+Math.random()*.55,bz*1.3).normalize();
+    sprk.dir.push(d);sprk.dist.push(1.1+Math.random()*1.4);
+    const q=new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.random()*6.3,Math.random()*6.3,Math.random()*6.3));
+    sprk.quat.push(q);
+    sprk.axis.push(new THREE.Vector3(Math.random()-.5,Math.random()-.5,Math.random()-.5).normalize());
+    sprk.spd.push(1+Math.random()*2);sprk.rot.push(Math.random()*6.3);
+    im.setColorAt(i,new THREE.Color(opts.sprk?opts.sprk[i%opts.sprk.length]:'#FF4F7B'));
+  }
+  im.instanceColor.needsUpdate=true;
+  const sprkPart=part('sprinkles',im,V(0,2.5,0),[0,0,0],V(0,3.3,0),[0,1.2,0],[.46,.70],0);
+  addPart(sprkPart);
+  /* CHOCOLATE SHARDS */
+  const shardsG=new THREE.Group();shardsG.position.set(0,2.3,0);
+  const shardFan=[];
+  [0.5,1.9,3.4,4.9].forEach((a,k)=>{
+    const sh=new THREE.Shape();
+    for(let i=0;i<6;i++){
+      const ang=i/6*Math.PI*2,r=.09+Math.random()*.09;
+      const px=Math.cos(ang)*r,py=Math.sin(ang)*r;
+      i?sh.lineTo(px,py):sh.moveTo(px,py);
+    }
+    sh.closePath();
+    const g=new THREE.ExtrudeGeometry(sh,{depth:.035,bevelEnabled:false});
+    g.rotateX(-Math.PI/2);
+    const m=new THREE.Mesh(g,mats.choc);
+    const px=Math.cos(a)*.46,pz=Math.sin(a)*.46,py=-.12+(Math.random()-.5)*.3;
+    m.position.set(px,py,pz);
+    m.rotation.set(Math.random()*.9-.45,Math.random()*6.3,Math.random()*.9-.45);
+    const sc=.85+Math.random()*.5;m.scale.setScalar(sc);
+    shardsG.add(m);
+    shardFan.push({obj:m,home:m.position.clone(),out:V(px*2.4,-.05+.22*k,pz*2.4),st:k*.02});
+  });
+  const shPart=part('shards',shardsG,V(0,2.3,0),[0,0,0],V(0,1.5,0),[.35,3,0],[.52,.74],.6);
+  shPart.fan=shardFan;addPart(shPart);
+  /* CHERRY */
+  const cherryG=new THREE.Group();cherryG.position.set(.03,3.34,0);
+  const ball=new THREE.Mesh(new THREE.SphereGeometry(.14,24,18),mats.cherry);
+  ball.scale.set(1,.92,1);cherryG.add(ball);
+  const stemCurve=new THREE.CatmullRomCurve3([V(0,.1,0),V(.02,.2,.02),V(.08,.26,.02),V(.14,.3,0)]);
+  cherryG.add(new THREE.Mesh(new THREE.TubeGeometry(stemCurve,12,.014,6),mats.stem));
+  addPart(part('cherry',cherryG,V(.03,3.34,0),[0,0,.15],V(1.75,4.1,.5),[-.4,0,-1.1],[.08,.30],2.5));
+  /* STRAW */
+  const strawCurve=new THREE.CatmullRomCurve3([V(.14,-.75,.10),V(.30,-.25,.16),V(.42,.25,.18),V(.50,.75,.20)]);
+  const straw=new THREE.Mesh(new THREE.TubeGeometry(strawCurve,24,.068,10),mats.straw);
+  addPart(part('straw',straw,V(0,2.8,0),[0,0,0],V(-1.85,3.6,.4),[.25,1.4,1.05],[.20,.42],.7));
+
+  function updateSprinkles(k,t){
+    for(let i=0;i<N;i++){
+      PV.copy(sprk.base[i]).addScaledVector(sprk.dir[i],sprk.dist[i]*k);
+      PV.y+=Math.sin(t*sprk.spd[i]+sprk.rot[i])*.07*k;
+      QT.copy(sprk.quat[i]);
+      const q2=new THREE.Quaternion().setFromAxisAngle(sprk.axis[i],t*sprk.spd[i]*k);
+      QT.multiply(q2);
+      M4.compose(PV,QT,SV);
+      im.setMatrixAt(i,M4);
+    }
+    im.instanceMatrix.needsUpdate=true;
+  }
+  updateSprinkles(0,0);
+  function setSprinkleColors(pal){
+    for(let i=0;i<N;i++)im.setColorAt(i,new THREE.Color(pal[i%pal.length]));
+    im.instanceColor.needsUpdate=true;
+  }
+  return{partsGroup,parts,byKey,mats,updateSprinkles,setSprinkleColors};
+}
+
+/* ---------- drop pool (click-to-shake splash) ---------- */
+function makeDrops(THREE,scene){
+  const mat=new THREE.MeshPhysicalMaterial({color:0xFF7D9C,roughness:.2,clearcoat:1,envMapIntensity:1});
+  const pool=[];
+  for(let i=0;i<12;i++){
+    const m=new THREE.Mesh(new THREE.SphereGeometry(.05,10,8),mat);
+    m.visible=false;scene.add(m);
+    pool.push({m,v:new THREE.Vector3(),life:0});
+  }
+  return{
+    burst(origin,color){
+      mat.color.copy(color);
+      let n=0;
+      for(const d of pool){
+        if(d.life>0)continue;
+        d.life=1;d.m.visible=true;
+        d.m.position.set(origin.x+(Math.random()-.5)*.8,origin.y+Math.random()*.3,origin.z+(Math.random()-.5)*.8);
+        d.v.set((Math.random()-.5)*2.6,2+Math.random()*1.6,(Math.random()-.5)*2.6);
+        if(++n>=9)break;
+      }
+    },
+    update(dt){
+      for(const d of pool){
+        if(d.life<=0)continue;
+        d.life-=dt*1.1;d.v.y-=7.5*dt;
+        d.m.position.addScaledVector(d.v,dt);
+        d.m.scale.setScalar(Math.max(.001,d.life));
+        if(d.life<=0||d.m.position.y<-2.6){d.life=0;d.m.visible=false}
+      }
+    }
+  };
+}
+
+/* ---------- shared drag / inertia ---------- */
+function attachDrag(canvas,st,onTap){
+  let px=0,moved=0,t0=0,dy0=0;
+  canvas.addEventListener('pointerdown',e=>{
+    st.drag=true;px=e.clientX;dy0=e.clientY;moved=0;t0=performance.now();
+    try{canvas.setPointerCapture(e.pointerId)}catch{}
+  });
+  canvas.addEventListener('pointermove',e=>{
+    if(!st.drag)return;
+    const dx=e.clientX-px;px=e.clientX;
+    st.rotY+=dx*.006;st.vel=dx*.006;moved+=Math.abs(dx);
+  });
+  const up=e=>{
+    if(!st.drag)return;
+    st.drag=false;st.lastDrag=performance.now()/1000;
+    if(moved<7&&Math.abs(e.clientY-dy0)<7&&performance.now()-t0<350&&onTap)onTap(e);
+  };
+  canvas.addEventListener('pointerup',up);
+  canvas.addEventListener('pointercancel',()=>{st.drag=false;st.lastDrag=performance.now()/1000});
+}
+
+/* ================================================================
+   SCENE A — the unblend (scroll-driven explosion)
+   ================================================================ */
+function initSceneA(THREE){
+  const canvas=$('#gl');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  scene.environment=makeEnv(THREE,renderer);
+  const camera=new THREE.PerspectiveCamera(35,1,.1,60);
+  const root=new THREE.Group();scene.add(root);
+  const F0=flavorOf('strawberry');
+  const shake=buildShake(THREE,{liquid:F0.liquid,cream:F0.cream,sprk:F0.sprk});
+  root.add(shake.partsGroup);
+  root.position.set(0,-1.85,0);
+  /* blob shadow */
+  const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.6,3.6),
+    new THREE.MeshBasicMaterial({map:blobShadowTex(THREE),transparent:true,opacity:.34,depthWrite:false}));
+  shadow.rotation.x=-Math.PI/2;shadow.position.y=-1.86;scene.add(shadow);
+  const drops=makeDrops(THREE,scene);
+  /* drag state */
+  const st={rotY:.4,vel:0,drag:false,lastDrag:0,wob:0};
+  attachDrag(canvas,st,e=>{
+    st.wob=1;
+    const top=new THREE.Vector3();
+    shake.byKey.cream.obj.getWorldPosition(top);top.y+=.4;
+    drops.burst(top,shake.mats.liquid.color);
+    gpop(e.clientX,e.clientY);
+  });
+  /* hover raycast */
+  const ray=new THREE.Raycaster(),ndc=new THREE.Vector2(-2,-2);
+  const tip=$('#partTip');
+  const PART_INFO={
+    cherry:'<b>THE BOBA</b> — chewy tapioca pearls',straw:'<b>THE STRAW</b> — wide-bore for pearls',
+    cream:'<b>THE CREAM</b> — whipped fresh daily',sprinkles:'<b>SPRINKLES</b> — nothing artificial',
+    shards:'<b>CHOCOLATE SHARDS</b> — rich & crunchy',liquid:'<b>THE BASE</b> — real milk + fresh fruit',
+    glass:'<b>THE CUP</b> — sealed with love'
+  };
+  let hover=null;
+  const pinR=()=>PIN.getBoundingClientRect();
+  canvas.addEventListener('pointermove',e=>{
+    const r=pinR();
+    ndc.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+    ray.setFromCamera(ndc,camera);
+    const hits=ray.intersectObjects(shake.partsGroup.children,true);
+    let key=null;
+    if(hits.length){
+      let o=hits[0].object;
+      while(o&&!(o.userData&&o.userData.part))o=o.parent;
+      key=o?o.userData.part:null;
+    }
+    hover=key?shake.byKey[key]:null;
+    if(hover){
+      tip.style.display='block';
+      tip.innerHTML=PART_INFO[key]||key;
+      const pr=pinR();
+      tip.style.left=clamp(e.clientX-pr.left+16,8,pr.width-180)+'px';
+      tip.style.top=clamp(e.clientY-pr.top+14,8,pr.height-40)+'px';
+    }else tip.style.display='none';
+  });
+  canvas.addEventListener('pointerleave',()=>{hover=null;tip.style.display='none'});
+  /* layout */
+  const A={vis:true,scale:1,baseX:1.55,baseZ:6.5,portrait:false};
+  function resize(){
+    const w=PIN.clientWidth,h=PIN.clientHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h;
+    A.portrait=w/h<.85;const mid=w/h<1.25;
+    camera.fov=A.portrait?42:35;camera.updateProjectionMatrix();
+    A.scale=A.portrait?.74:mid?.9:1;
+    A.baseX=A.portrait?0:mid?.8:1.55;
+    A.baseZ=A.portrait?7.7:6.5;
+  }
+  new ResizeObserver(resize).observe(PIN);resize();
+  new IntersectionObserver(es=>es.forEach(e=>A.vis=e.isIntersecting),{rootMargin:'80px'}).observe(SEC);
+  /* per-frame */
+  const tmpV=new THREE.Vector3();
+  A.update=(dt,t)=>{
+    if(!A.vis)return;
+    pS+=(pRaw-pS)*Math.min(1,dt*8);
+    const Eg=ss(.08,.6,pS)*(1-ss(.88,1,pS));
+    const back=easeOutBack(ss(.88,1,pS));
+    root.position.x=A.baseX*(1-ss(.05,.28,pS));
+    root.position.y=-1.85+Math.sin(t*.85)*.05*(1-Eg);
+    if(!st.drag){st.rotY+=st.vel;st.vel*=.93;if(!reduced&&t-st.lastDrag>2.5)st.rotY+=dt*.1}
+    st.wob=Math.max(0,st.wob-dt*1.5);
+    root.rotation.set(MY*.06,st.rotY+MX*.14,Math.sin(t*24)*.09*st.wob);
+    root.scale.setScalar(A.scale*(1+Math.sin(t*22)*.03*st.wob));
+    shake.partsGroup.rotation.y=ss(.05,.95,pS)*Math.PI*2;
+    for(const p of shake.parts){
+      const k=ss(p.range[0],p.range[1],pS)*(1-back);
+      p.obj.position.lerpVectors(p.homeP,p.outP,k);
+      p.obj.position.y+=Math.sin(t*1.2+p.phase)*.06*k;
+      p.obj.rotation.set(lerp(p.homeR[0],p.outR[0],k),lerp(p.homeR[1],p.outR[1],k)+t*p.spin*k,lerp(p.homeR[2],p.outR[2],k));
+      if(p.key==='cherry')p.obj.rotation.z+=Math.sin(t*2)*.08*(1-k);
+      p.hoverS+=(((hover===p)?1.08:1)-p.hoverS)*.14;
+      p.obj.scale.setScalar(p.hoverS);
+      for(const f of p.fan){
+        const kf=ss(p.range[0]+f.st,p.range[1],pS)*(1-back);
+        f.obj.position.lerpVectors(f.home,f.out,kf);
+      }
+    }
+    shake.updateSprinkles(ss(.46,.70,pS)*(1-back),t);
+    shadow.material.opacity=.34*(1-Eg*.75);
+    shadow.scale.setScalar(1+Eg*.8);
+    shadow.position.x=root.position.x;
+    drops.update(dt);
+    camera.position.set(MX*.35,.35,A.baseZ+Eg*3.2);
+    camera.lookAt(0,.05+Eg*.28,0);
+    renderer.render(scene,camera);
+    if(Math.abs(pS-domP)>.0008){domP=pS;updDom()}
+    tmpV.set(0,0,0); /* keep tmp warm */
+  };
+  updDom();
+  return A;
+}
+
+/* ================================================================
+   SCENE B — the mixer (live configurator)
+   ================================================================ */
+function initSceneB(THREE){
+  const stage=$('#mixStage'),canvas=$('#gl2');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.setClearColor(0x000000,0);
+  const scene=new THREE.Scene();
+  scene.environment=makeEnv(THREE,renderer);
+  const camera=new THREE.PerspectiveCamera(36,1,.1,60);
+  camera.position.set(0,.25,6.2);camera.lookAt(0,0,0);
+  const root=new THREE.Group();scene.add(root);
+  const F0=flavorOf('strawberry');
+  const shake=buildShake(THREE,{liquid:F0.liquid,cream:F0.cream,sprk:F0.sprk});
+  root.add(shake.partsGroup);
+  root.position.set(0,-1.85,0);
+  const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.2,3.2),
+    new THREE.MeshBasicMaterial({map:blobShadowTex(THREE),transparent:true,opacity:.3,depthWrite:false}));
+  shadow.rotation.x=-Math.PI/2;shadow.position.y=-1.86;scene.add(shadow);
+  const drops=makeDrops(THREE,scene);
+  const st={rotY:.5,vel:0,drag:false,lastDrag:0,wob:0};
+  attachDrag(canvas,st,e=>{
+    st.wob=1;
+    const top=new THREE.Vector3();
+    shake.byKey.cream.obj.getWorldPosition(top);top.y+=.4;
+    drops.burst(top,shake.mats.liquid.color);
+    gpop(e.clientX,e.clientY);
+  });
+  const B={vis:false};
+  function resize(){
+    const w=stage.clientWidth,h=stage.clientHeight;
+    renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(resize).observe(stage);resize();
+  new IntersectionObserver(es=>es.forEach(e=>B.vis=e.isIntersecting),{threshold:.1}).observe(stage);
+  /* config state */
+  const tgtLiquid=new THREE.Color(F0.liquid),tgtCream=new THREE.Color(F0.cream);
+  const SZ={S:.8,M:.95,L:1.08};
+  let mScale=.95,scaleTgt=.95,creamS=1,creamTgt=1,popK=0;
+  const T={
+    cherry:  {ref:shake.byKey.cherry.obj, s:0,tgt:1},
+    sprinkles:{ref:shake.byKey.sprinkles.obj,s:0,tgt:1},
+    shards:  {ref:shake.byKey.shards.obj,  s:0,tgt:0},
+    straw:   {ref:shake.byKey.straw.obj,   s:0,tgt:1},
+  };
+  shake.byKey.cream.obj.scale.setScalar(1);
+  const api={
+    setFlavor(f){
+      tgtLiquid.set(f.liquid);tgtCream.set(f.cream);
+      shake.setSprinkleColors(f.sprk);
+      popK=.95;
+    },
+    setSize(k){scaleTgt=SZ[k]||.95},
+    setToggles(set){
+      T.cherry.tgt=set.has('cherry')?1:0;
+      T.sprinkles.tgt=set.has('sprinkles')?1:0;
+      T.shards.tgt=set.has('shards')?1:0;
+      T.straw.tgt=set.has('straw')?1:0;
+      creamTgt=set.has('cream')?1.28:1;
+    }
+  };
+  B.update=(dt,t)=>{
+    if(!B.vis)return;
+    if(!st.drag){st.rotY+=st.vel;st.vel*=.93;st.rotY+=dt*.22}
+    st.wob=Math.max(0,st.wob-dt*1.5);
+    mScale+=(scaleTgt-mScale)*Math.min(1,dt*6);
+    root.rotation.set(MY*.05,st.rotY+MX*.1,Math.sin(t*24)*.08*st.wob);
+    root.position.y=-1.85+Math.sin(t*.9)*.06;
+    root.scale.setScalar(mScale*(1+Math.sin(t*22)*.03*st.wob));
+    /* colours glide */
+    const cl=1-Math.pow(.002,dt);
+    shake.mats.liquid.color.lerp(tgtLiquid,cl);
+    shake.mats.cream.color.lerp(tgtCream,cl);
+    /* topping pops */
+    for(const k in T){
+      const e=T[k];
+      e.s+=(e.tgt-e.s)*Math.min(1,dt*7);
+      e.ref.scale.setScalar(Math.max(.001,easeOutBack(clamp(e.s,0,1))));
+      e.ref.visible=e.s>.02;
+    }
+    creamS+=(creamTgt-creamS)*Math.min(1,dt*6);
+    shake.byKey.cream.obj.scale.setScalar(creamS);
+    popK=Math.max(0,popK-dt*1.15);
+    shake.updateSprinkles(popK,t);
+    drops.update(dt);
+    camera.position.z=6.2*(mScale/.95);
+    camera.lookAt(0,0,0);
+    renderer.render(scene,camera);
+  };
+  return{update:B.update,api};
+}
+
+/* ---------- graceful 3D failure ---------- */
+threeReady.then(ok=>{
+  if(ok!=='ok'||!sceneA){
+    $('#no3dA').style.display='grid';
+    $('#gl').style.display='none';
+    $('#mixStage').style.opacity=.35;
+    toast('3D engine offline — everything else still pours','info');
+  }
+});
+
+/* ---------- loader ---------- */
+(()=>{
+  const start=performance.now();
+  let pct=0;
+  const iv=setInterval(()=>{
+    pct=Math.min(100,pct+Math.random()*14+4);
+    $('#ldFill').style.width=pct+'%';
+    $('#ldPct').textContent=Math.round(pct)+'%';
+    if(pct>=100)clearInterval(iv);
+  },90);
+  const finish=()=>{
+    const el=performance.now()-start;
+    setTimeout(()=>{
+      $('#loader').classList.add('done');
+      document.body.classList.add('loaded');
+      setTimeout(()=>$('#loader').remove(),800);
+    },Math.max(0,1100-el));
+  };
+  Promise.race([threeReady,new Promise(r=>setTimeout(r,2400))]).then(finish);
+  addEventListener('load',()=>setTimeout(finish,2400));
+})();
+
+/* ---------- master loop ---------- */
+let last=performance.now();
+const ring={};
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  const t=now/1000;
+  cursorFrame();
+  floatFrame();
+  if(sceneA)sceneA.update(dt,t);
+  if(sceneB)sceneB.update(dt,t);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+icons();
+addEventListener('load',icons);
+</script>
+</body>
+</html>
